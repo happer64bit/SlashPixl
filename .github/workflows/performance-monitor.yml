@@ -2,9 +2,13 @@ name: Lighthouse Report Generation
 
 on:
   push:
-    branches: [ git-workflows ]
+    branches:
+        - main
+        - dev
   pull_request:
-    branches: [ git-workflows ]
+    branches:
+        - main
+        - dev
 
 jobs:
   lighthouse:
