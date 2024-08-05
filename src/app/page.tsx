@@ -41,22 +41,22 @@ export default function Home() {
         <div className="space-y-8">
           <div className="text-center">
             <p className="font-black text-5xl">
-              Add <span className="text-red-500">Watermark</span> to your Image and Video
+              Add <span className="text-red-500">Watermark</span> to your Image
             </p>
           </div>
           <div className="flex items-center justify-center gap-5">
             <Button size={"lg"} className="h-11 gap-3" onClick={handleFileUpload}>
               <UploadIcon />
-              Upload Images/Video
+              Upload Images
             </Button>
             <input
               type="file"
               className="hidden"
               id="file-input"
-              accept="image/*, video/*"
+              accept="image/*"
               ref={fileInputRef}
               onChange={handleFileChange}
-              multiple={false} // Allow only one file selection
+              multiple={false}
             />
           </div>
         </div>
