@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -49,6 +50,19 @@ export default function Home() {
               <UploadIcon />
               Upload Images
             </Button>
+            <a
+              href="https://www.producthunt.com/posts/slashpixl?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-slashpixl"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=476818&theme=light"
+                alt="SlashPixl - Add Watermark to Your Images and Videos Easily | Product Hunt"
+                style={{ width: 'auto', height: '45px' }}
+                width="auto"
+                height="40"
+              />
+            </a>
             <input
               type="file"
               className="hidden"
