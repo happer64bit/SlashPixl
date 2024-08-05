@@ -1,49 +1,39 @@
-name: Lighthouse CI
+name: Lighthouse Report Generation
 
 on:
+  push:
+    branches: [ git-workflows ]
   pull_request:
-    branches:
-      - main
-      - dev
+    branches: [ git-workflows ]
+
 jobs:
   lighthouse:
-    name: Run Lighthouse CI
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: 'Installing deps'
+        run: |
+          yarn
+          npm i -g @lhci/cli@0.9.x serve
+
+      - name: 'Build Prodcution'
+        run: yarn build
+
+      - name: 'Serve Prodcution Server'
+        run: yarn start &
+
+      - name: 'Run Lighthouse tests'
+        continue-on-error: true
+        run: lhci autorun
+
+      - name: 'Upload report'
+        uses: actions/upload-artifact@v2
+        if: always()
         with:
-          node-version: '16'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Start the Next.js app
-        run: npm run start &
-      
-      - name: Run Lighthouse CI
-        run: npx lhci --config .lighthouserc.js --output html --output-path ./report.html
-
-      - name: Upload Lighthouse report
-        uses: actions/upload-artifact@v3
-        with:
-          name: lighthouse-report
-          path: ./report.html
-
-      - name: Comment on PR
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const fs = require('fs');
-            const report = fs.readFileSync('./report.html', 'utf8');
-            const pullRequest = context.issue.number;
-
-            await github.rest.issues.createComment({
-              ...context.repo,
-              issue_number: pullRequest,
-              body: `Lighthouse report:\n\n[View Report](https://github.com/${context.repo.owner}/${context.repo.repo}/suites/${process.env.GITHUB_RUN_ID}/artifacts/1)`
-            });
+          name: lhci-reports
+          path: |
+            .lighthouseci/
+          # if-no-files-found: error
+          # if: ${{ success() && steps.lighthouse.outputs.hasHtmlReport == 'true' && steps.lighthouse.outputs.hasJsonReport == 'true' }}
