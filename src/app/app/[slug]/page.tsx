@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Canvas from "@/components/Canvas";
-import { Input }from "@/components/ui/input";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 
 interface TextOptions {
     text: string;
@@ -32,7 +32,6 @@ export default function BlobPage({ params }: { params: { slug: string } }) {
         if (encodedBlobUrl) {
             try {
                 const decodedBlobUrl = atob(encodedBlobUrl);
-                console.log("Decoded Blob URL:", decodedBlobUrl);
                 setFileUrl(decodedBlobUrl);
             } catch (error) {
                 console.error("Error decoding blob URL:", error);
@@ -64,7 +63,17 @@ export default function BlobPage({ params }: { params: { slug: string } }) {
                 {fileUrl ? (
                     <>
                         {fileUrl.endsWith(".mp4") ? (
-                            <video controls src={fileUrl} className="w-full max-w-3xl" />
+                            <>
+                                <video controls src={fileUrl} className="w-full max-w-3xl" />
+                                <Canvas fileUrl={fileUrl} texts={texts} />
+                                <Button
+                                    onClick={saveImage}
+                                    className="w-full h-11"
+                                    size={"lg"}
+                                >
+                                    Save Image
+                                </Button>
+                            </>
                         ) : (
                             <>
                                 <Canvas fileUrl={fileUrl} texts={texts} />
