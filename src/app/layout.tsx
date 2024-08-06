@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: "SlashPixl - Add Watermark to Your Images and Videos Easily",
   description: "SlashPixl is your go-to online tool for adding watermarks to your images and videos. Protect your content with customized text, rotation, opacity, font, and color options. Upload, edit, and save your watermarked media effortlessly.",
   keywords: "watermark images, watermark videos, add watermark online, image watermark tool, video watermark tool, watermark generator, watermarking software, online watermark tool, customize watermark, protect content, watermark text options, SlashPixl",
+  icons: "https://slashpixl.vercel.app/favicon.ico"
 };
 
 export default function RootLayout({
