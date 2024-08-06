@@ -28,22 +28,29 @@ export default function BlobPage({ params }: { params: { slug: string } }) {
             color: "#000000"
         }
     ]);
+    const [accessed, setAccessed] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
     const router = useRouter();
 
     useEffect(() => {
-        if (encodedBlobUrl) {
+        if (encodedBlobUrl && !accessed) {
+            setLoading(true);
+
             try {
                 const decodedBlobUrl = atob(encodedBlobUrl);
                 setFileUrl(decodedBlobUrl);
+                setAccessed(true);
 
-                // Check if the file URL is valid
-                fetch(decodedBlobUrl, { method: 'HEAD' })
+                fetch(decodedBlobUrl)
                     .then(response => {
+                        setLoading(false);
                         if (!response.ok) {
+                            console.error("Blob URL is not accessible.");
                             notFound();
                         }
                     })
-                    .catch(() => {
+                    .catch(error => {
+                        console.error("Fetch error:", error);
                         notFound();
                     });
             } catch (error) {
@@ -51,7 +58,7 @@ export default function BlobPage({ params }: { params: { slug: string } }) {
                 notFound();
             }
         }
-    }, [encodedBlobUrl]);
+    }, [encodedBlobUrl, accessed]);
 
     const handleInputChange = (index: number, field: string, value: any) => {
         setTexts((prevTexts) =>
@@ -72,13 +79,22 @@ export default function BlobPage({ params }: { params: { slug: string } }) {
     };
 
     const notFound = () => {
-        router.push("/")
-    }
+        router.push("/");
+    };
 
     return (
         <div>
             <div className="max-w-3xl mx-auto my-10 space-y-4">
-                {fileUrl ? (
+                {loading ? (
+                    <div
+                        className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-primary motion-reduce:animate-[spin_1.5s_linear_infinite] mx-auto"
+                        role="status">
+                        <span
+                            className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+                        >Loading...</span
+                        >
+                    </div>
+                ) : fileUrl ? (
                     <>
                         {fileUrl.endsWith(".mp4") ? (
                             <>
@@ -126,7 +142,7 @@ export default function BlobPage({ params }: { params: { slug: string } }) {
                                                 </select>
                                             </label>
                                             <label className="block">
-                                                Opacity
+                                                Opacity:
                                                 <Input
                                                     type="number"
                                                     step="0.1"
@@ -186,7 +202,14 @@ export default function BlobPage({ params }: { params: { slug: string } }) {
                         )}
                     </>
                 ) : (
-                    <p>Loading...</p>
+                    <div
+                        className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-primary motion-reduce:animate-[spin_1.5s_linear_infinite] mx-auto"
+                        role="status">
+                        <span
+                            className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+                        >Loading...</span
+                        >
+                    </div>
                 )}
             </div>
         </div>
