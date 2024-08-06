@@ -37,7 +37,7 @@ export default function BlobPage({ params }: { params: { slug: string } }) {
             setLoading(true);
 
             try {
-                const decodedBlobUrl = atob(encodedBlobUrl);
+                const decodedBlobUrl = atob(decodeURIComponent(encodedBlobUrl));
                 setFileUrl(decodedBlobUrl);
                 setAccessed(true);
 
