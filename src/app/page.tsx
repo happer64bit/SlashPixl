@@ -46,7 +46,7 @@ export default function Home() {
             </p>
           </div>
           <div className="flex items-center justify-center gap-5">
-            <Button size={"lg"} className="h-[45px] gap-3" onClick={handleFileUpload}>
+            <Button size={"lg"} className="h-11 gap-3" onClick={handleFileUpload}>
               <UploadIcon />
               Upload Images
             </Button>
